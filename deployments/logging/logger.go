@@ -19,7 +19,7 @@ func initLogger() {
 	loggingSync.Do(func() {
 		var logLevel zapcore.Level
 		err := logLevel.UnmarshalText([]byte(config.GetConfig().Loglevel))
-		if err == nil {
+		if err != nil {
 			panic("Error setting up logger " + err.Error())
 		}
 		configObj := zap.Config{
