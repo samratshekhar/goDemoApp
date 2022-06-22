@@ -3,13 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"net/http"
-
-	"goDemoApp/internal/models"
-
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
+	"goDemoApp/internal/server"
+	"log"
 )
 
 const tableCreationQuery = `CREATE TABLE IF NOT EXISTS products
@@ -39,18 +35,9 @@ func Initialize(user, password, dbname string) *sql.DB {
 }
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/home", HomeHandler)
-	http.Handle("/", r)
-	db := Initialize("root", "root", "localhost:3306")
-	ensureTableExists(db)
-	p := models.Product{Id: 1, Name: "p2", Price: "66.66"}
-	p.DeleteProduct(db)
-	log.Fatal(http.ListenAndServe(":8080", r))
+
+	server.InitHttpServer()
 
 }
 
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	fmt.Print("Home")
-}
+
