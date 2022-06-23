@@ -39,8 +39,8 @@ func Initialize(user, password, dbname string) *sql.DB {
 var httpServer *http.Server
 
 func main() {
-	httpServer = server.InitHttpServer(ExitHandler)
-	server.StartHttpServer(httpServer)
+	httpServer = server.InitHTTPServer(ExitHandler)
+	server.StartHTTPServer(httpServer)
 }
 
 func ExitHandler(w http.ResponseWriter, r *http.Request) {

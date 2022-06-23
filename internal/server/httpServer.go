@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func InitHttpServer(exitHandler func(http.ResponseWriter, *http.Request)) *http.Server {
+func InitHTTPServer(exitHandler func(http.ResponseWriter, *http.Request)) *http.Server {
 	log := logging.GetLogger()
 	defer func() {
 		if r := recover(); r != nil {
@@ -26,13 +26,13 @@ func InitHttpServer(exitHandler func(http.ResponseWriter, *http.Request)) *http.
 	http.Handle("/", r)
 
 	httpServer := http.Server{
-		Addr:        "0.0.0.0:" + config.GetConfig().HttpServerConfig.Port,
-		IdleTimeout: time.Duration(utils.ConvertStringToInt(config.GetConfig().HttpServerConfig.IdleTimeoutSeconds, 1000)) * time.Second,
+		Addr:        "0.0.0.0:" + config.GetConfig().HTTPServerConfig.Port,
+		IdleTimeout: time.Duration(utils.ConvertStringToInt(config.GetConfig().HTTPServerConfig.IdleTimeoutSeconds, 1000)) * time.Second,
 	}
 	return &httpServer
 }
 
-func StartHttpServer(httpServer *http.Server) {
+func StartHTTPServer(httpServer *http.Server) {
 	log := logging.GetLogger()
 	err := httpServer.ListenAndServe()
 	if err != nil {

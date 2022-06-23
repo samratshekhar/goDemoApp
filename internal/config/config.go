@@ -12,7 +12,7 @@ var configSync sync.Once
 type config struct {
 	Loglevel         string           `mapstructure:"LOG_LEVEL"`
 	Env              string           `mapstructure:"ENVIRONMENT"`
-	HttpServerConfig httpServerConfig `mapstructure:"HTTP_SERVER_CONFIG"`
+	HTTPServerConfig httpServerConfig `mapstructure:"HTTP_SERVER_CONFIG"`
 }
 
 type httpServerConfig struct {
