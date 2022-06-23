@@ -3,9 +3,9 @@ package server
 import (
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"goDemoApp/deployments/logging"
 	"goDemoApp/internal/api"
 	"goDemoApp/internal/config"
+	"goDemoApp/internal/logging"
 	"goDemoApp/internal/utils"
 	"net/http"
 	"time"
@@ -50,6 +50,6 @@ func addRoutes(r *mux.Router, exitHandler func(http.ResponseWriter, *http.Reques
 }
 
 func isDevMode() bool {
-	env := config.GetConfig().Env
+	env := config.GetConfig().Environment
 	return env == "dev" || env == "slt"
 }

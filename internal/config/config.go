@@ -11,7 +11,7 @@ var configSync sync.Once
 
 type config struct {
 	Loglevel         string           `mapstructure:"LOG_LEVEL"`
-	Env              string           `mapstructure:"ENVIRONMENT"`
+	Environment      string           `mapstructure:"ENVIRONMENT"`
 	HTTPServerConfig httpServerConfig `mapstructure:"HTTP_SERVER_CONFIG"`
 }
 
@@ -27,12 +27,12 @@ func GetConfig() config {
 
 func initConfig() {
 	configSync.Do(func() {
-		loadConfig(&configuration, "./deployments/config", "etc/demo")
+		loadConfig(&configuration, "default", "./deployments/config", "etc/demo")
 	})
 }
 
-func loadConfig(config *config, paths ...string) {
-	viper.SetConfigName("default")
+func loadConfig(config *config, configName string, paths ...string) {
+	viper.SetConfigName(configName)
 	viper.SetConfigType("yml")
 	for _, path := range paths {
 		viper.AddConfigPath(path)

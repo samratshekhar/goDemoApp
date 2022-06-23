@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"goDemoApp/deployments/logging"
 	"goDemoApp/internal/config"
+	"goDemoApp/internal/logging"
 	"strconv"
 )
 
