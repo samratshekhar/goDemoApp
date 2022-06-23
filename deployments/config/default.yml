@@ -1,2 +1,5 @@
-loglevel: debug
-env: prod
+LOG_LEVEL: debug
+ENVIRONMENT: dev
+HTTP_SERVER_CONFIG:
+  PORT: 8081
+  IDLE_TIMEOUT_SECONDS: 1000

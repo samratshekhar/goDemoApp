@@ -4,8 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"goDemoApp/deployments/logging"
 	"goDemoApp/internal/server"
-	"log"
+	"net/http"
+	"time"
 )
 
 const tableCreationQuery = `CREATE TABLE IF NOT EXISTS products
@@ -18,7 +20,7 @@ const tableCreationQuery = `CREATE TABLE IF NOT EXISTS products
 
 func ensureTableExists(db *sql.DB) {
 	if _, err := db.Exec(tableCreationQuery); err != nil {
-		log.Fatal(err)
+		//log.Fatal(err)
 	}
 }
 
@@ -29,15 +31,30 @@ func Initialize(user, password, dbname string) *sql.DB {
 	var err error
 	db, err := sql.Open("mysql", connectionString)
 	if err != nil {
-		log.Fatal(err)
+		//log.Fatal(err)
 	}
 	return db
 }
 
+var httpServer *http.Server
+
 func main() {
-
-	server.InitHttpServer()
-
+	httpServer = server.InitHttpServer(ExitHandler)
+	server.StartHttpServer(httpServer)
 }
 
+func ExitHandler(w http.ResponseWriter, r *http.Request) {
+	go kill()
+	w.WriteHeader(http.StatusOK)
+}
 
+func kill() {
+	log := logging.GetLogger()
+	log.Infof("Stopping server in 2s")
+	<-time.After(time.Second * time.Duration(2))
+	log.Info("Sending msg on chan")
+	err := httpServer.Close()
+	if err != nil {
+		return
+	}
+}
