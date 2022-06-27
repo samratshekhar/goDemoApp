@@ -4,7 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"goDemoApp/internal/logging"
+	"goDemoApp/internal/config"
+	"goDemoApp/internal/logger"
 	"goDemoApp/internal/server"
 	"net/http"
 	"time"
@@ -39,8 +40,22 @@ func Initialize(user, password, dbname string) *sql.DB {
 var httpServer *http.Server
 
 func main() {
+	setupLogger()
 	httpServer = server.InitHTTPServer(ExitHandler)
 	server.StartHTTPServer(httpServer)
+}
+
+func setupLogger() {
+	cfg := config.GetConfig()
+	var env logger.Option
+	var logLevel logger.Option
+	if cfg.Environment == "prod" {
+		env = logger.ProdEnv()
+	} else {
+		env = logger.NonProdEnv()
+	}
+	logLevel = logger.LogLevel(cfg.Loglevel)
+	logger.GetLogger(env, logLevel)
 }
 
 func ExitHandler(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +64,7 @@ func ExitHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func kill() {
-	log := logging.GetLogger()
+	log := logger.GetLogger()
 	log.Infof("Stopping server in 2s")
 	<-time.After(time.Second * time.Duration(2))
 	log.Info("Sending msg on chan")

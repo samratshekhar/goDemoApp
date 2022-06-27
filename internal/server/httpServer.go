@@ -5,14 +5,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"goDemoApp/internal/api"
 	"goDemoApp/internal/config"
-	"goDemoApp/internal/logging"
+	"goDemoApp/internal/logger"
 	"goDemoApp/internal/utils"
 	"net/http"
 	"time"
 )
 
 func InitHTTPServer(exitHandler func(http.ResponseWriter, *http.Request)) *http.Server {
-	log := logging.GetLogger()
+	log := logger.GetLogger()
 	defer func() {
 		if r := recover(); r != nil {
 			log.Errorf("Error setting up http server %s", r)
@@ -33,7 +33,7 @@ func InitHTTPServer(exitHandler func(http.ResponseWriter, *http.Request)) *http.
 }
 
 func StartHTTPServer(httpServer *http.Server) {
-	log := logging.GetLogger()
+	log := logger.GetLogger()
 	err := httpServer.ListenAndServe()
 	if err != nil {
 		log.Errorf("Error in starting server: %s", err.Error())
