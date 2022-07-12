@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func InitHTTPServer(exitHandler func(http.ResponseWriter, *http.Request)) *http.Server {
+func InitHTTPServer(widgetHandler api.WidgetHandler, exitHandler func(http.ResponseWriter, *http.Request)) *http.Server {
 	log := logger.GetLogger()
 	defer func() {
 		if r := recover(); r != nil {
@@ -21,7 +21,7 @@ func InitHTTPServer(exitHandler func(http.ResponseWriter, *http.Request)) *http.
 	}()
 
 	r := mux.NewRouter()
-	addRoutes(r, exitHandler)
+	addRoutes(r, widgetHandler, exitHandler)
 
 	http.Handle("/", r)
 
@@ -40,13 +40,14 @@ func StartHTTPServer(httpServer *http.Server) {
 	}
 }
 
-func addRoutes(r *mux.Router, exitHandler func(http.ResponseWriter, *http.Request)) {
+func addRoutes(r *mux.Router, widgetHandler api.WidgetHandler, exitHandler func(http.ResponseWriter, *http.Request)) {
 	r.Handle("/metric", promhttp.Handler())
 	r.HandleFunc("/health-check", api.HealthCheckHandler)
 	if isDevMode() {
 		r.HandleFunc("/kill", exitHandler)
 	}
 	r.HandleFunc("/home", api.HomeHandler)
+	r.HandleFunc("/widget", widgetHandler.CreateWidget).Methods("POST")
 }
 
 func isDevMode() bool {

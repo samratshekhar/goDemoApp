@@ -10,10 +10,11 @@ var configuration config
 var configSync sync.Once
 
 type config struct {
-	Loglevel         string           `mapstructure:"LOG_LEVEL"`
-	Environment      string           `mapstructure:"ENVIRONMENT"`
-	HTTPServerConfig httpServerConfig `mapstructure:"HTTP_SERVER_CONFIG"`
-	MySQLConfig      dbConfig         `mapstructure:"MYSQL_CONFIG"`
+	Loglevel         string              `mapstructure:"LOG_LEVEL"`
+	Environment      string              `mapstructure:"ENVIRONMENT"`
+	HTTPServerConfig httpServerConfig    `mapstructure:"HTTP_SERVER_CONFIG"`
+	MySQLConfig      dbConfig            `mapstructure:"MYSQL_CONFIG"`
+	Dynamo           DynamoConfiguration `mapstructure:"DYNAMO"`
 }
 
 type httpServerConfig struct {
@@ -25,6 +26,17 @@ type dbConfig struct {
 	UserName string `mapstructure:"USER_NAME"`
 	Password string `mapstructure:"PASSWORD"`
 	URL      string `mapstructure:"URL"`
+}
+
+type DynamoConfiguration struct {
+	DaxEndpoint      string `mapstructure:"DAX_END_POINT"`
+	DaxRegion        string `mapstructure:"DAX_REGION"`
+	DBEndpoint       string `mapstructure:"DB_END_POINT"`
+	DBRegion         string `mapstructure:"DB_REGION"`
+	DaxEnabled       bool   `mapstructure:"DAX_ENABLED"`
+	WidgetTable      string `mapstructure:"WIDGET_TABLE"`
+	WidgetAuditTable string `mapstructure:"WIDGET_AUDIT_TABLE"`
+	PageLimit        int64  `mapstructure:"PAGE_LIMIT"`
 }
 
 func GetConfig() config {

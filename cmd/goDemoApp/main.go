@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"goDemoApp/internal/api"
 	"goDemoApp/internal/config"
+	"goDemoApp/internal/datastore/dao"
+	"goDemoApp/internal/datastore/db/nosql"
 	"goDemoApp/internal/logger"
 	"goDemoApp/internal/server"
 	"net/http"
@@ -41,8 +44,14 @@ var httpServer *http.Server
 
 func main() {
 	setupLogger()
-	httpServer = server.InitHTTPServer(ExitHandler)
+	widgetHandler := api.NewWidgetHandler(setupDatabase())
+	httpServer = server.InitHTTPServer(widgetHandler, ExitHandler)
 	server.StartHTTPServer(httpServer)
+}
+
+func setupDatabase() dao.WidgetDAO {
+	cfg := config.GetConfig()
+	return nosql.InitDDB(cfg.Dynamo)
 }
 
 func setupLogger() {
