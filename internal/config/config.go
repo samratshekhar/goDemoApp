@@ -13,11 +13,18 @@ type config struct {
 	Loglevel         string           `mapstructure:"LOG_LEVEL"`
 	Environment      string           `mapstructure:"ENVIRONMENT"`
 	HTTPServerConfig httpServerConfig `mapstructure:"HTTP_SERVER_CONFIG"`
+	MySQLConfig      dbConfig         `mapstructure:"MYSQL_CONFIG"`
 }
 
 type httpServerConfig struct {
 	Port               string `mapstructure:"PORT"`
 	IdleTimeoutSeconds string `mapstructure:"IDLE_TIMEOUT_SECONDS"`
+}
+
+type dbConfig struct {
+	UserName string `mapstructure:"USER_NAME"`
+	Password string `mapstructure:"PASSWORD"`
+	URL      string `mapstructure:"URL"`
 }
 
 func GetConfig() config {
