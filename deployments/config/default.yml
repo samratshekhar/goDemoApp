@@ -7,3 +7,13 @@ MYSQL_CONFIG:
   USER_NAME: root
   PASSWORD: root
   URL: 0.0.0.0:3306
+
+DYNAMO:
+  DAX_END_POINT: "http://localhost:8000"
+  DAX_REGION: "ap-southeast-1"
+  DB_END_POINT: "http://localhost:8000"
+  DB_REGION: "ap-southeast-1"
+  DAX_ENABLED: false
+  WIDGET_TABLE: "foundations-widgets"
+  WIDGET_AUDIT_TABLE: "foundations-widgets-audit"
+  PAGE_LIMIT: 100

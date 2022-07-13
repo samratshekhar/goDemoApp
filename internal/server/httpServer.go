@@ -48,6 +48,7 @@ func addRoutes(r *mux.Router, widgetHandler api.WidgetHandler, exitHandler func(
 	}
 	r.HandleFunc("/home", api.HomeHandler)
 	r.HandleFunc("/widget", widgetHandler.CreateWidget).Methods("POST")
+	r.HandleFunc("/widget/{id}/{templateType}", widgetHandler.PutWidget).Methods("PUT")
 }
 
 func isDevMode() bool {
